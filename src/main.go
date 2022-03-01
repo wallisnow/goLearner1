@@ -82,7 +82,27 @@ func main() {
 
 	/////////////////lesson 3////////////////////
 	fmt.Println("/////////////////lesson 3////////////////////")
-	funcs := []func(u *Object.User){Object.SetId(12)}
-	customizedUser := Object.NewCustomizedUser(funcs)
+
+	customizedUser := Object.NewCustomizedUser(Object.SetId(11), Object.SetName("lucy"))
 	fmt.Printf("%p %+v\n", customizedUser, customizedUser)
+
+	useri := Object.NewUUser()
+	Object.SetName("Jack").Apply(useri)
+	Object.SetId(333).Apply(useri)
+	fmt.Printf("%p %+v\n", useri, useri)
+
+	newCustomizedUser123 := Object.NewCustomizedUser(Object.SetId(123), Object.SetName("onetwothree"))
+	fmt.Printf("%p %+v\n", newCustomizedUser123, newCustomizedUser123)
+
+	aCustomizedUser555 := Object.NewACustomizedUser(Object.SetId(555), Object.SetName("five3"))
+	fmt.Printf("%p %+v\n", aCustomizedUser555, aCustomizedUser555)
+
+	aCustomizedUser555.ApplyFunc(func(u *Object.User) *Object.User {
+		u.Id = 666
+		u.Name = "sixsixsix"
+		u.Sex = 1
+		return u
+	})
+
+	fmt.Printf("%p %+v\n", aCustomizedUser555, aCustomizedUser555)
 }

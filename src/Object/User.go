@@ -10,6 +10,27 @@ type User struct {
 	Name string
 }
 
+type UserAttrFunc func(u *User)
+
+type UserAttrFuncs []UserAttrFunc
+
+func (this *User) ApplyFunc(f func(u *User) *User) *User {
+	return f(this)
+}
+
+func (this UserAttrFunc) Apply(u *User) {
+	//这里的this, 就是UserAttrFunc, 也就是
+	//func(u *User) {}(u)
+	this(u)
+}
+
+//将上面的多个apply封装成多层函数
+func (this UserAttrFuncs) Applys(u *User) {
+	for _, attrFunc := range this {
+		attrFunc.Apply(u)
+	}
+}
+
 //不适用指针的方式, 也是go中不推荐的方式
 func NewUser() User {
 	return User{}
@@ -26,18 +47,32 @@ func NewUUUser() *User {
 }
 
 //写一个通用的构造函数
-//
-func NewCustomizedUser(f []func(u *User)) *User {
+//给其自由定义属性
+//缺点是不好理解
+func NewCustomizedUser(f ...UserAttrFunc) *User {
 	u := new(User)
 	for _, fun := range f {
-		fun(u)
+		//fun(u)
+		fun.Apply(u)
 	}
 	return u
 }
 
-func SetId(id int) func(u *User) {
+func NewACustomizedUser(fs ...UserAttrFunc) *User {
+	u := new(User)
+	UserAttrFuncs(fs).Applys(u)
+	return u
+}
+
+func SetId(id int) UserAttrFunc {
 	return func(u *User) {
 		u.Id = id
+	}
+}
+
+func SetName(name string) UserAttrFunc {
+	return func(u *User) {
+		u.Name = name
 	}
 }
 
