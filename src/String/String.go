@@ -21,8 +21,9 @@ func (this String) Len() int {
 	return len(this)
 }
 
-func (this String) ForEach(f func(chars string)) {
+func (this String) ForEach(consumer func(chars string)) {
 	for i := 0; i < len(this); i++ {
-		f(fmt.Sprintf("%c", this[i]))
+		consumer(fmt.Sprintf("%c", this[i]))
+		consumer(fmt.Sprintf("%T", this[i]))
 	}
 }
