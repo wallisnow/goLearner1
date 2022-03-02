@@ -142,4 +142,15 @@ func main() {
 	})
 
 	fmt.Printf("%+v\n", users)
+
+	/////////////////lesson 5////////////////////
+	fmt.Println("/////////////////lesson 5////////////////////")
+
+	var service Object.IService
+	service = Object.NewUserService()
+	userj := Object.NewACustomizedUser(Object.SetId(123), Object.SetName("ZZZ"))
+	service.Save(userj)
+
+	service.Save("abc")
+
 }
