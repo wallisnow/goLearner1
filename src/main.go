@@ -4,7 +4,9 @@ import (
 	"base/src/Map"
 	"base/src/Object"
 	"base/src/String"
+	"base/src/Utils"
 	"fmt"
+	"reflect"
 	"sort"
 )
 
@@ -152,5 +154,38 @@ func main() {
 	service.Save(userj)
 
 	service.Save("abc")
+
+	/////////////////lesson 6////////////////////
+	fmt.Println("/////////////////lesson 6////////////////////")
+	t := reflect.TypeOf(userj)
+	fmt.Println(t.String())
+	v := reflect.ValueOf(userj)
+	//因为传入的是指针, 所以需要先获取指针指向的值
+	elem := v.Elem()
+	fmt.Println(elem)
+
+	values := []interface{}{12, "test"}
+
+	valmap := make(map[string]interface{})
+	valmap["Id"] = 88
+	valmap["Sex"] = 1
+	valmap["Name"] = "testttt"
+
+	for i := 0; i < elem.NumField(); i++ {
+		//使用interface 获取每一个值, 不需要判断
+		fmt.Println(elem.Field(i).Interface())
+
+		//如果想通过反射将字段赋值, 可以通过set方法, 但必须确保类型一致
+		if elem.Field(i).Kind() == reflect.Int {
+			of := reflect.ValueOf(values[0])
+			elem.Field(i).Set(of)
+		}
+	}
+
+	//{10 10 ZZZ} &{10 10 ZZZ}
+	fmt.Println(elem, userj)
+
+	Utils.Map2Struct(valmap, userj)
+	fmt.Println(elem, userj)
 
 }
