@@ -2,6 +2,7 @@ package test
 
 import (
 	"base/src/Utils"
+	"strconv"
 	"testing"
 )
 
@@ -25,5 +26,23 @@ func TestJoin(t *testing.T) {
 				t.Errorf("Join() = %v, want %v", got, tt.want)
 			}
 		})
+	}
+}
+
+func BenchmarkJoin(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Utils.Join(strconv.Itoa(i))
+	}
+}
+
+func BenchmarkGoJoin(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Utils.GoJoin(strconv.Itoa(i))
+	}
+}
+
+func BenchmarkBufferJoin(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Utils.BufferJoin(strconv.Itoa(i))
 	}
 }
