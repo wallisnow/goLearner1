@@ -1,9 +1,11 @@
 package main
 
 import (
+	"base/src/Map"
 	"base/src/Object"
 	"base/src/String"
 	"fmt"
+	"sort"
 )
 
 func main() {
@@ -105,4 +107,39 @@ func main() {
 	})
 
 	fmt.Printf("%p %+v\n", aCustomizedUser555, aCustomizedUser555)
+
+	/////////////////lesson 4////////////////////
+	fmt.Println("/////////////////lesson 4////////////////////")
+	newUser := Map.NewUser()
+	newUser["1"] = "Jack"
+	newUser["2"] = "Bob"
+	fmt.Printf("%+v\n", newUser)
+
+	//go中都是值传递, 但是这里是不需要传指针的, 因为map内部实际已经获取了指针
+	Map.Modify(newUser)
+	fmt.Printf("%+v\n", newUser)
+
+	newUser.
+		WithValue("3", "Eric").
+		WithValue("4", "LiuJie")
+
+	fmt.Printf("%+v\n", newUser)
+
+	//_ = newUser.String()
+
+	newUser2 := Map.NewUser()
+	newUser2.
+		WithValue("1", "Mhamd").
+		WithValue("2", "data")
+
+	var users []Map.User
+	users = append(users, newUser, newUser2)
+
+	//这里第二个函数类似predictor, 来定义排序的规则
+	sort.Slice(users, func(i, j int) bool {
+		name := users[i]["1"].(string) //断言
+		return name == "Mhamd"
+	})
+
+	fmt.Printf("%+v\n", users)
 }
