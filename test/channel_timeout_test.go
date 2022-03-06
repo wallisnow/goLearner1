@@ -8,13 +8,14 @@ import (
 
 var result = make(chan string)
 
-func task() {
+func task(call func()) {
 	time.Sleep(time.Second * 3)
 	result <- "success"
+	call()
 }
 
 func start() chan string {
-	go task()
+	go task(callback)
 	return result
 }
 
@@ -23,10 +24,10 @@ func callback() {
 }
 
 func runTask() (interface{}, error) {
-	taskRet := start()
+	start()
 	select {
-	case c := <-taskRet:
-		callback()
+	case c := <-result:
+		fmt.Println("task done")
 		return c, nil
 	case <-time.After(time.Second * 5):
 		return nil, fmt.Errorf("\ntimeout")
