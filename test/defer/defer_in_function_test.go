@@ -1,4 +1,4 @@
-package test
+package _defer
 
 import (
 	"fmt"
@@ -33,6 +33,7 @@ func TestDeferInChain(t *testing.T) {
 	student.change(10)
 }
 
+/****************************************************************************************************/
 //这里因为, 参数在传入函数时其实已经是确定的值, 所以defer 是不会有任何改变
 func TestDeferStillReturn10(t *testing.T) {
 	i := 10
@@ -75,4 +76,20 @@ func TestDeferInloop(t *testing.T) {
 			fmt.Println(i)
 		}()
 	}
+}
+
+/****************************************************************************************************/
+
+func TestDeferAndPanic(t *testing.T) {
+
+	defer func() {
+		defer fmt.Println("No 1")
+		defer fmt.Println("No 2")
+		defer fmt.Println("No 3")
+
+		panic("DO PANIC 1")
+	}()
+
+	//此时异常不会执行, 因为 panic 1 已经抛出异常
+	panic("DO PANIC 2")
 }
